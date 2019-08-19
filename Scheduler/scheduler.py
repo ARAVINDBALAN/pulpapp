@@ -1,7 +1,8 @@
 import pandas
 import xlrd
 global df
-pandas.read_excel()
+xls = pd.ExcelFile(import_file_path)
+
 sched={}
 i=0
 while i<15:
