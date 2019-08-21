@@ -1,4 +1,5 @@
 import tkinter as tk
+import os
 #from tkinter import *
 import pandas as pd
 from tkinter import filedialog,Grid,N,S,W,E,messagebox
@@ -43,6 +44,8 @@ def getExcel():
     df = df[df["Balance Dispatch"]=="Dispatch"]
     df = df[df.Validity=="Valid"]
     print(df)
+    a = os.getcwd()
+    os.chdir(a+"\\Output")
     name_of_created = "execle_gen_"+str(date.today())+".xlsx"
     df[df.PC=='PULP'].to_excel(name_of_created)
 search_sku_entry = tk.Entry(root)
