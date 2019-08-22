@@ -83,9 +83,9 @@ def getExcel():
     op=os.getcwd()
     try:
         os.mkdir("Output")
-        os.chdir(os.getcwd()+"/Output")    
+        os.chdir(os.getcwd()+"//Output")
     except FileExistsError:
-        os.chdir(os.getcwd()+"/Output")
+        os.chdir(os.getcwd()+"//Output")
     name_of_created = "execle_gen_"+str(date.today())+".xlsx"
     df[df.PC=='PULP'].to_excel(name_of_created)
     os.chdir(op)
