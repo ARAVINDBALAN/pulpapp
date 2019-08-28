@@ -38,11 +38,12 @@ def getExcel():
     global df  
     import_file_path = filedialog.askopenfilename(title="open")
     xls = pd.ExcelFile(import_file_path)
-    cols = [0,1,2,6,51,52,57,58,59,60,130,131]
+    cols = [0,1,2,6,13,16,17,51,52,57,58,59,60,130,131]
     df = pd.read_excel(xls,"MAIN DATA",skiprows=4,usecols=cols)
     df = df[df.PC=="PULP"]
     df = df[df["Balance Dispatch"]=="Dispatch"]
     df = df[df.Validity=="Valid"]
+    df["L2 Indent"]=df["INDENT KG"]-df["L1 Indent"]
     print(df)
     a = os.getcwd()
     os.chdir(a+"\\Output")
