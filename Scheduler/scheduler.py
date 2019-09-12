@@ -88,6 +88,4 @@ cur = 0
 while cur < len(list(inp[indent])):
     sku_amt, cur_depo, cur_sku = list(inp[indent])[cur], list(inp["DEPO"])[cur], list(inp["MATERIAL"])[cur]
     tempinp = inp.groupby("DEPO")
-    print(cur_sku, sku_amt, cur_depo, indent)
-    print(tempinp.get_group(cur_depo))
     cur += 1

@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d73feb40-eb75-484b-9b1e-9590c3fe800a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Output/execle_gen_2019-09-12.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scheduler/scheduler.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scheduler/scheduler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -133,7 +130,7 @@
       <workItem from="1567273794072" duration="4918000" />
       <workItem from="1567318281218" duration="4118000" />
       <workItem from="1568298227452" duration="167000" />
-      <workItem from="1568298820687" duration="787000" />
+      <workItem from="1568298820687" duration="1318000" />
     </task>
     <task id="LOCAL-00001" summary="!st commit">
       <created>1566221250517</created>
@@ -191,7 +188,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567278780809</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Taking scheduler input">
+      <created>1568299746278</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1568299746278</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
