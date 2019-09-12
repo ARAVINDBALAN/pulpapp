@@ -1,6 +1,6 @@
 
 import sys
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui
 from pulpui import Ui_Pulpapp
 
 class MyDialog(QtGui.QDialog):
