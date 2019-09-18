@@ -1,15 +1,34 @@
 from typing import List, Any
 
 import pandas as pd
-import xlrd
 import os
 import datetime
 from datetime import timedelta
+from pandas import Series
 import calendar
-
 from pandas import ExcelFile
-op = {"Plan Day":[],"Item":[],"Item Desc":[],"Blend":[],"Hopper":[],"ResId":[],"Shift-A":[],"Shift-B":[],"Shift-C":[]}
+
+
+def uniquelist(list1):
+    # intilize a null list
+    unique_list = []
+
+    # traverse for all elements
+    for x in list1:
+        # check if exists in unique_list or not
+        if x not in unique_list:
+            unique_list.append(x)
+            # print list
+    return unique_list
+
+
+op = {"Plan Day": [], "Item": [], "Item Desc": [], "Blend": [], "Hopper": [], "ResId": [], "Shift-A": [], "Shift-B": [],
+      "Shift-C": []}
+work = {"SKU": [], "Depo": [], "Machine": [], "TTC": [], "Quant": []}
 op = pd.DataFrame(op)
+op.set_index(["Plan Day", "Item"])
+work = pd.DataFrame(work)
+work.set_index(["SKU", "Depo"])
 indent = "L1 Indent"
 days_remaining: List[Any] = []
 
@@ -41,7 +60,7 @@ skudim = skudim[skudim["Select your PC & Blank before Updating"] == "PULP"]
 
 # Taking SKU-Machine dependency
 path = pd.ExcelFile(root[0] + "\\input\\SKU wise - Machine wise capacities.xlsx")
-cols = [0, 2, 4, 5, 6, 7]
+cols = [0, 1, 2, 4, 5, 6, 7]
 skumach = pd.read_excel(path, "Sheet3", skiprows=5, usecols=cols)
 
 # Taking Hopper-Machine Dependency
@@ -57,6 +76,7 @@ day = int(tod.split('-')[2])
 # Getting days remaining
 if day > 14:
     indent = "L2 Indent"
+
 i = [day, month]
 tod = datetime.date.today()
 if indent == "L1 Indent":
@@ -80,12 +100,9 @@ temp = days_remaining
 for n in days_remaining:
     if n in holiday_list:
         temp.remove(n)
+days_remaining = temp
 
-# Checking for SKU with lowest intent
-inp = inp[inp[indent] != 0]
-inp = inp.sort_values(indent)
-cur = 0
-while cur < len(list(inp[indent])):
-    sku_amt, cur_depo, cur_sku = list(inp[indent])[cur], list(inp["DEPO"])[cur], list(inp["MATERIAL"])[cur]
-    tempinp = inp.groupby("DEPO")
-    cur += 1
+# Getting time to complete depo wise
+temp = list(skumach["MACHINE / WORK CENTER "])
+temp = uniquelist(temp)
+print(temp)
