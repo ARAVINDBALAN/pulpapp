@@ -124,25 +124,30 @@ for n in skumach.index:
 
 # Getting rates
 for n in inp.index:
-    temp = {"SKU": [], "Depo": [], "Machine": [], "TTC": [], "Quant": []}
-    mat = inp["MATERIAL"][n]
-    try:
-        mach = get_index_of_list(skmh,mat)
-    except NOSKU:
-        inp.drop(n)
-        continue
-    filter1 = skumach["MACHINE / WORK CENTER "] == mach
-    filter2 = skumach["SKU CODE"] == mat
-    rate = (skumach.where(filter1 & filter2,inplace=False))
-    rate = rate.dropna()
-    rate = int(list(rate["OUTPUT PER HOUR"])[0])
     quant = inp[indent][n]
-    ttc = quant/rate
-    temp["SKU"]=mat
-    temp["Depo"] = inp["DEPO"][n]
-    temp["Machine"] = mach
-    temp["TTC"] = ttc
-    temp["Quant"] = quant
-    work = work.append(temp,verify_integrity=True,ignore_index=True)
+    if quant != 0:
+        temp = {"SKU": [], "Depo": [], "Machine": [], "TTC": [], "Quant": []}
+        mat = inp["MATERIAL"][n]
+        try:
+            mach = get_index_of_list(skmh,mat)
+        except NOSKU:
+            inp.drop(n)
+            continue
+        filter1 = skumach["MACHINE / WORK CENTER "] == mach
+        filter2 = skumach["SKU CODE"] == mat
+        rate = (skumach.where(filter1 & filter2,inplace=False))
+        rate = rate.dropna()
+        rate = int(list(rate["OUTPUT PER HOUR"])[0])
+        ttc = quant/rate
+        temp["SKU"] = mat
+        temp["Depo"] = inp["DEPO"][n]
+        temp["Machine"] = mach
+        temp["TTC"] = ttc
+        temp["Quant"] = quant
+        work = work.append(temp,verify_integrity=True,ignore_index=True)
 
+work.sort_values(by="TTC", inplace=True)
+
+
+print(work)
 
