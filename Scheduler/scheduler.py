@@ -7,7 +7,8 @@ from datetime import timedelta
 from pandas import Series
 import calendar
 from pandas import ExcelFile
-
+class NOSKU(Exception):
+    pass
 
 def uniquelist(list1):
     # intilize a null list
@@ -20,6 +21,12 @@ def uniquelist(list1):
             unique_list.append(x)
             # print list
     return unique_list
+
+def get_index_of_list(dict,item):
+    for n in dict.items():
+        if item in n[1]:
+            return n[0]
+    raise NOSKU
 
 
 op = {"Plan Day": [], "Item": [], "Item Desc": [], "Blend": [], "Hopper": [], "ResId": [], "Shift-A": [], "Shift-B": [],
@@ -39,7 +46,7 @@ os.chdir(root[0])
 
 # Taking input of KM Tracker
 path = pd.ExcelFile(root[0] + "\\Output\\execle_gen_" + str(datetime.date.today()) + ".xlsx")
-cols = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+cols = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 inp = pd.read_excel(path, "Sheet1", usecols=cols)
 
 # Taking SKU-Blend Correlation
@@ -74,7 +81,7 @@ year = int(tod.split('-')[0])
 day = int(tod.split('-')[2])
 
 # Getting days remaining
-if day > 14:
+if day > 15:
     indent = "L2 Indent"
 
 i = [day, month]
@@ -103,6 +110,39 @@ for n in days_remaining:
 days_remaining = temp
 
 # Getting time to complete depo wise
-temp = list(skumach["MACHINE / WORK CENTER "])
-temp = uniquelist(temp)
-print(temp)
+skumach["MACHINE / WORK CENTER "] = pd.Series(skumach["MACHINE / WORK CENTER "]).fillna(method='ffill')
+skumach.set_index(["MACHINE / WORK CENTER ", "SKU CODE"])
+skmh = {}
+
+# Getting list of machines
+for n in skumach.index:
+    skmh[skumach["MACHINE / WORK CENTER "][n]] = []
+
+# Getting list of SKU for each machine
+for n in skumach.index:
+    skmh[skumach["MACHINE / WORK CENTER "][n]] = skmh[skumach["MACHINE / WORK CENTER "][n]] + [skumach["SKU CODE"][n]]
+
+# Getting rates
+for n in inp.index:
+    temp = {"SKU": [], "Depo": [], "Machine": [], "TTC": [], "Quant": []}
+    mat = inp["MATERIAL"][n]
+    try:
+        mach = get_index_of_list(skmh,mat)
+    except NOSKU:
+        inp.drop(n)
+        continue
+    filter1 = skumach["MACHINE / WORK CENTER "] == mach
+    filter2 = skumach["SKU CODE"] == mat
+    rate = (skumach.where(filter1 & filter2,inplace=False))
+    rate = rate.dropna()
+    rate = int(list(rate["OUTPUT PER HOUR"])[0])
+    quant = inp[indent][n]
+    ttc = quant/rate
+    temp["SKU"]=mat
+    temp["Depo"] = inp["DEPO"][n]
+    temp["Machine"] = mach
+    temp["TTC"] = ttc
+    temp["Quant"] = quant
+    work = work.append(temp,verify_integrity=True,ignore_index=True)
+
+
