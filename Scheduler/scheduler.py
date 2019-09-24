@@ -29,25 +29,28 @@ def get_index_of_list(dict,item):
     raise NOSKU
 
 
-op = {"Plan Day": [], "Item": [], "Item Desc": [], "Blend": [], "Hopper": [], "ResId": [], "Shift-A": [], "Shift-B": [],
-      "Shift-C": []}
-work = {"SKU": [], "Depo": [], "Machine": [], "TTC": [], "Quant": []}
-op = pd.DataFrame(op)
-op.set_index(["Plan Day", "Item"])
-work = pd.DataFrame(work)
-work.set_index(["SKU", "Depo"])
+# op = {"Plan Day": [], "Item": [], "Item Desc": [], "Blend": [], "Hopper": [], "ResId": [], "Shift-A": [], "Shift-B": [],
+# #      "Shift-C": []}
+timetocomp = {"SKU": [], "Depo": [], "Machine": [], "TTC": [], "Quant": []}
+# op = pd.DataFrame(op)
+# op.set_index(["Plan Day", "Item"])
+timetocomp = pd.DataFrame(timetocomp)
+timetocomp.set_index(["SKU", "Depo"])
 indent = "L1 Indent"
 days_remaining: List[Any] = []
+
 
 # Getting current working directory
 root = os.getcwd()
 root = root.split("\\Scheduler")  # to get one file up
 os.chdir(root[0])
 
-# Taking input of KM Tracker
-path = pd.ExcelFile(root[0] + "\\Output\\execle_gen_" + str(datetime.date.today()) + ".xlsx")
-cols = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-inp = pd.read_excel(path, "Sheet1", usecols=cols)
+path = pd.ExcelFile(root[0] + "\\input\\SKU - Blend Correlation, SKU details.xlsx"
+stage1op = pd.read_excel(path)
+# # Taking input of KM Tracker
+# path = pd.ExcelFile(root[0] + "\\Output\\execle_gen_" + str(datetime.date.today()) + ".xlsx")
+# cols = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+# inp = pd.read_excel(path, "Sheet1", usecols=cols)
 
 # Taking SKU-Blend Correlation
 path = pd.ExcelFile(root[0] + "\\input\\SKU - Blend Correlation, SKU details.xlsx")
@@ -74,6 +77,18 @@ skumach = pd.read_excel(path, "Sheet3", skiprows=5, usecols=cols)
 path = pd.ExcelFile(root[0] + "\\input\\Hopper - machine correlation.xlsx")
 cols = [1, 2]
 hopmach = pd.read_excel(path, "Sheet1", skiprows=1, usecols=cols)
+
+#machine SKU Co-relations
+skumach["MACHINE / WORK CENTER "] = pd.Series(skumach["MACHINE / WORK CENTER "]).fillna(method='ffill')
+skmh = {}
+
+# Getting list of machines
+for n in skumach.index:
+    skmh[skumach["MACHINE / WORK CENTER "][n]] = []
+
+# Getting list of SKU for each machine
+for n in skumach.index:
+    skmh[skumach["MACHINE / WORK CENTER "][n]] = skmh[skumach["MACHINE / WORK CENTER "][n]] + [skumach["SKU CODE"][n]]
 
 tod = str(datetime.date.today())
 month = int(tod.split('-')[1])
@@ -110,17 +125,6 @@ for n in days_remaining:
 days_remaining = temp
 
 # Getting time to complete depo wise
-skumach["MACHINE / WORK CENTER "] = pd.Series(skumach["MACHINE / WORK CENTER "]).fillna(method='ffill')
-skumach.set_index(["MACHINE / WORK CENTER ", "SKU CODE"])
-skmh = {}
-
-# Getting list of machines
-for n in skumach.index:
-    skmh[skumach["MACHINE / WORK CENTER "][n]] = []
-
-# Getting list of SKU for each machine
-for n in skumach.index:
-    skmh[skumach["MACHINE / WORK CENTER "][n]] = skmh[skumach["MACHINE / WORK CENTER "][n]] + [skumach["SKU CODE"][n]]
 
 # Getting rates
 for n in inp.index:
@@ -135,7 +139,7 @@ for n in inp.index:
             continue
         filter1 = skumach["MACHINE / WORK CENTER "] == mach
         filter2 = skumach["SKU CODE"] == mat
-        rate = (skumach.where(filter1 & filter2,inplace=False))
+        rate = (skumach.where(filter1 & filter2, inplace=False))
         rate = rate.dropna()
         rate = int(list(rate["OUTPUT PER HOUR"])[0])
         ttc = quant/rate
@@ -144,10 +148,9 @@ for n in inp.index:
         temp["Machine"] = mach
         temp["TTC"] = ttc
         temp["Quant"] = quant
-        work = work.append(temp,verify_integrity=True,ignore_index=True)
+        timetocomp = timetocomp.append(temp, verify_integrity=True, ignore_index=True)
 
-work.sort_values(by="TTC", inplace=True)
+timetocomp.sort_values(by="TTC", inplace=True)
 
 
-print(work)
-
++

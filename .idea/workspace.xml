@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d73feb40-eb75-484b-9b1e-9590c3fe800a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Output/execle_gen_2019-09-24.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/Output/execle_gen_2019-09-24.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Scheduler/scheduler.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scheduler/scheduler.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -136,7 +135,7 @@
       <workItem from="1568300853565" duration="5524000" />
       <workItem from="1568793865696" duration="13179000" />
       <workItem from="1568884848166" duration="23569000" />
-      <workItem from="1569313676525" duration="1989000" />
+      <workItem from="1569313676525" duration="5650000" />
     </task>
     <task id="LOCAL-00001" summary="!st commit">
       <created>1566221250517</created>
@@ -222,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569310564029</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Completed TTC and sorted">
+      <created>1569316844746</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1569316844746</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -247,10 +253,11 @@
     <MESSAGE value="Proper arrangement" />
     <MESSAGE value="Taking scheduler input" />
     <MESSAGE value="Completed TTC" />
-    <option name="LAST_COMMIT_MESSAGE" value="Completed TTC" />
+    <MESSAGE value="Completed TTC and sorted" />
+    <option name="LAST_COMMIT_MESSAGE" value="Completed TTC and sorted" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/pulpapp$scheduler.coverage" NAME="scheduler Coverage Results" MODIFIED="1569316434943" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Scheduler" />
+    <SUITE FILE_PATH="coverage/pulpapp$scheduler.coverage" NAME="scheduler Coverage Results" MODIFIED="1569322353240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Scheduler" />
     <SUITE FILE_PATH="coverage/pulpapp$main.coverage" NAME="main Coverage Results" MODIFIED="1569316410983" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
