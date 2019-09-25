@@ -1,7 +1,7 @@
 # This program helps in comparing sku in the sku dimesnion file to 
 # the sku gotten in the km tracker . It first extracts data from km tracker checks if 
 # its in sku dimension folder
-
+#sku code is changed to MATERIAL for merging 
 import pandas as pd
 import shutil
 ##KM tracker is imported and cols are selected 
