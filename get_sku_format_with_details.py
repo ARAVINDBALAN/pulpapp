@@ -22,8 +22,8 @@ sku_dimension["volume"] = sku_dimension.apply(lambda row: row["CASE (Length)"]*r
 flag = 0
 
 sku_dimension.rename(columns={"SKU CODE":"MATERIAL"},inplace=True)
-sku_dimension["MATERIAL"] = sku_dimension["MATERIAL"].str.lower()
-km_tracker["MATERIAL"] = km_tracker["MATERIAL"].str.lower()
+sku_dimension["MATERIAL"] = sku_dimension["MATERIAL"].str.upper()
+km_tracker["MATERIAL"] = km_tracker["MATERIAL"].str.upper()
 
 sku_dimension.drop("Select your PC & Blank before Updating",axis=1)
 
