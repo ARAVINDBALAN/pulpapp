@@ -45,7 +45,7 @@ root = os.getcwd()
 root = root.split("\\Scheduler")  # to get one file up
 os.chdir(root[0])
 
-path = pd.ExcelFile(root[0] + "\\input\\SKU - Blend Correlation, SKU details.xlsx"
+path = pd.ExcelFile(root[0] + "\\input\\output_from_km_dimension.xlsx")
 stage1op = pd.read_excel(path)
 # # Taking input of KM Tracker
 # path = pd.ExcelFile(root[0] + "\\Output\\execle_gen_" + str(datetime.date.today()) + ".xlsx")
@@ -127,15 +127,15 @@ days_remaining = temp
 # Getting time to complete depo wise
 
 # Getting rates
-for n in inp.index:
-    quant = inp[indent][n]
+for n in stage1op.index:
+    quant = stage1op[indent][n]
     if quant != 0:
         temp = {"SKU": [], "Depo": [], "Machine": [], "TTC": [], "Quant": []}
-        mat = inp["MATERIAL"][n]
+        mat = stage1op["MATERIAL"][n]
         try:
             mach = get_index_of_list(skmh,mat)
         except NOSKU:
-            inp.drop(n)
+            stage1op.drop(n,inplace=True)
             continue
         filter1 = skumach["MACHINE / WORK CENTER "] == mach
         filter2 = skumach["SKU CODE"] == mat
@@ -144,13 +144,22 @@ for n in inp.index:
         rate = int(list(rate["OUTPUT PER HOUR"])[0])
         ttc = quant/rate
         temp["SKU"] = mat
-        temp["Depo"] = inp["DEPO"][n]
+        temp["Depo"] = stage1op["DEPO"][n]
         temp["Machine"] = mach
         temp["TTC"] = ttc
         temp["Quant"] = quant
         timetocomp = timetocomp.append(temp, verify_integrity=True, ignore_index=True)
 
 timetocomp.sort_values(by="TTC", inplace=True)
-
-
-+
+schedule = {}
+machqueue = {}
+for n in list(skmh.items()):
+    schedule[n[0]] = [["No item","No item","No item"]]*15#len(days_remaining)
+    machqueue[n[0]] = []
+quant_to_prod = {}
+for n in timetocomp.index:
+    quant_to_prod[timetocomp["SKU"][n]+" "+timetocomp["Depo"][n]] = timetocomp["Quant"][n]
+print(schedule)
+print(machqueue)
+print(quant_to_prod)
+print(len(quant_to_prod))
