@@ -1,7 +1,7 @@
 # This program helps in comparing sku in the sku dimesnion file to 
 # the sku gotten in the km tracker . It first extracts data from km tracker checks if 
 # its in sku dimension folder
-#sku code is changed to MATERIAL for merging 
+
 import pandas as pd
 import shutil
 ##KM tracker is imported and cols are selected 
@@ -10,7 +10,7 @@ import shutil
 
 
 
-km_tracker = pd.read_excel("Output of KM Tracker as on 28th Jun 2019.xlsx",sheet_name= "MAIN DATA",skiprows=4,usecols=[0,1,2,3,4,5,13,16,51,52,130,131])
+km_tracker = pd.read_excel("Output of KM Tracker as on 04th Jul 2019.xlsx",sheet_name= "MAIN DATA",skiprows=4,usecols=[0,1,2,3,4,5,13,16,51,52,130,131])
 km_tracker = km_tracker[km_tracker["PC"] == "PULP"]
 km_tracker = km_tracker[km_tracker["Validity"]=="Valid"]
 km_tracker = km_tracker[km_tracker["Balance Dispatch"]=="Dispatch"]
