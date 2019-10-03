@@ -10,6 +10,13 @@ from pandas import ExcelFile
 class NOSKU(Exception):
     pass
 
+def addtomach(schedule, cursku, mach, timetocomp, skumach, shift):
+    listofmach = []
+    for n in schedule:
+        if len(schedule[mach]) < 3:
+
+
+
 def uniquelist(list1):
     # intilize a null list
     unique_list = []
@@ -19,21 +26,22 @@ def uniquelist(list1):
         # check if exists in unique_list or not
         if x not in unique_list:
             unique_list.append(x)
-            # print list
     return unique_list
 
-def get_index_of_list(dict,item):
+def get_index_of_list(dict, item, skipmachine =()):
     for n in dict.items():
+        if n[0] in skipmachine:
+            continue
         if item in n[1]:
             return n[0]
     raise NOSKU
 
 
-# op = {"Plan Day": [], "Item": [], "Item Desc": [], "Blend": [], "Hopper": [], "ResId": [], "Shift-A": [], "Shift-B": [],
-# #      "Shift-C": []}
+ op = {"Plan Day": [], "Item": [], "Item Desc": [], "Blend": [], "Hopper": [], "ResId": [], "Shift-A": [], "Shift-B": [],
+      "Shift-C": []}
 timetocomp = {"SKU": [], "Depo": [], "Machine": [], "TTC": [], "Quant": []}
-# op = pd.DataFrame(op)
-# op.set_index(["Plan Day", "Item"])
+op = pd.DataFrame(op)
+op.set_index(["Plan Day", "Item"])
 timetocomp = pd.DataFrame(timetocomp)
 timetocomp.set_index(["SKU", "Depo"])
 indent = "L1 Indent"
@@ -151,15 +159,34 @@ for n in stage1op.index:
         timetocomp = timetocomp.append(temp, verify_integrity=True, ignore_index=True)
 
 timetocomp.sort_values(by="TTC", inplace=True)
+timetocomp.reset_index(drop=True)
 schedule = {}
 machqueue = {}
 for n in list(skmh.items()):
-    schedule[n[0]] = [["No item","No item","No item"]]*15#len(days_remaining)
+    schedule[n[0]] = [["No item","No item","No item"]]*len(days_remaining)
     machqueue[n[0]] = []
 quant_to_prod = {}
 for n in timetocomp.index:
     quant_to_prod[timetocomp["SKU"][n]+" "+timetocomp["Depo"][n]] = timetocomp["Quant"][n]
 print(schedule)
-print(machqueue)
-print(quant_to_prod)
-print(len(quant_to_prod))
+# print(machqueue)
+# print(quant_to_prod)
+# print(len(quant_to_prod))
+
+i = days_remaining[0]
+while i in days_remaining:
+    ind = list(timetocomp.index)
+    j = 0
+    shift = 1
+    while True:
+        curdepo = str(timetocomp["Depo"][ind[j]])
+        print(curdepo)
+        temp = (timetocomp.groupby("Depo"))
+        temp = temp.get_group(curdepo)
+        temp = temp.sort_values("TTC")
+        for k in temp.index:
+            cursku = temp["SKU"][k]
+            mach = temp["Machine"][k]
+            schedule = addtomach(schedule, cursku, mach, timetocomp, skumach, shift)
+        if shift > 3:
+            i += timedelta(days=1)
