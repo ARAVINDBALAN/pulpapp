@@ -1,20 +1,35 @@
 from PyQt4 import QtSql,QtGui
 import sqlite3
 
+connection = sqlite3.connect("pulp.db")
+
 def create_db():
-    db = sqlite3.connect("pulp.db")
-    
-    db.execute("create table if not exists working_days(id int primary key,days varchar(20))")
+    db = connection.cursor()
+    db.execute("create table if not exists working_days(days varchar(20))")
+    #db.execute("create table if not exists machines(id int primary key,")
     db.close()
 
 def insert_into_work(data):
-    db = sqlite3.connect("pulp.db")
+    db = connection.cursor()
     for i in data:
-        db.execute("insert into working_days values(?,?)",(1,i))
-    db.commit()    
+        db.execute("insert into working_days values(?)",[i])
+    connection.commit()    
+    db.close()
+
+def select_date_from_table(tablename):
+    db = connection.cursor()
+    res = db.execute("select days from "+tablename)
+    return res 
     db.close()
 
 
+def delete_dates_from_table(data):
+    db = connection.cursor()
+    db.execute("delete from working_days where days=?",(data,))
+    connection.commit()
+    db.close()
+
 
 create_db()
-insert_into_work(["2019-10-01"])
+#a=select_date_from_table("working_days")
+#insert_into_work(['2019-10-19'])
